@@ -9,11 +9,11 @@ public interface BookDAO {
 
     /**
      * Gets particular book by isbn
-     * @param isbn
+     * @param bookId
      * @return book
      */
 
-    Book getBook(String isbn);
+    Book getBook(int bookId);
 
 
     /**

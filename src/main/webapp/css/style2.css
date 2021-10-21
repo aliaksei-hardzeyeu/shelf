@@ -1,18 +1,34 @@
-.flex-container {
+.main-container {
     display: flex;
 }
 
-.flex-row {
-    display: flex;
-    justify-content: flex-end;
+.cover {
+    width: 30%;
+    height:  600px;
+    background-color: aqua;
+    border: 1px dashed red;
 }
 
-.header-cell {
+.table-values {
+    width: 30%;
+    height: 600px;
+    background-color: olive;
+    border: 1px dashed blue;
+}
+
+.buttons-area {
+    background-color: lightblue;
+    border: 1px dashed orange;
+    width: 60%;
+    height: 250px;
+}
+
+.value-cell {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 93%;
     text-align: center;
-    background-color: bisque;
-    height: 50px;
-    border: 1px;
-    border-color: black;
-    width: 20%;
-
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid black;
 }

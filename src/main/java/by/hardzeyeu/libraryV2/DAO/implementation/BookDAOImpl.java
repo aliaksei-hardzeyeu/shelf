@@ -14,13 +14,13 @@ public class BookDAOImpl implements BookDAO {
 
 
     @Override
-    public Book getBook(String isbn) {
+    public Book getBook(int bookId) {
         Book book = new Book();
-        String query = "SELECT * FROM books WHERE isbn = ?";
+        String query = "SELECT * FROM books WHERE book_id = ?";
 
         try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, isbn);
+            preparedStatement.setInt(1, bookId);
 
             ResultSet result = preparedStatement.executeQuery();
 
@@ -70,7 +70,7 @@ public class BookDAOImpl implements BookDAO {
         book.setTitle(result.getString("title"));
         book.setPublisher(result.getString("publisher"));
         book.setPageCount(result.getInt("page_count"));
-        book.setISBN(result.getString("isbn"));
+        book.setIsbn(result.getString("isbn"));
         book.setDes(result.getString("des"));
         book.setPublDate(Utils.convertToLocalDateViaSqlDate(result.getDate("publ_date")));
         book.setStatus(result.getString("status"));

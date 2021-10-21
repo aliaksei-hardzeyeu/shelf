@@ -23,8 +23,8 @@ public class BookServices {
     }
 
 
-    public Book getBook(String isbn) {
-        return bookDAO.getBook(isbn);
+    public Book getBook(int bookId) {
+        return bookDAO.getBook(bookId);
     }
 
     public List<Book> getListOfBooks() {
@@ -44,4 +44,10 @@ public class BookServices {
     public void removeBook(int book_id) {
         bookDAO.removeBook(book_id);
     }
+
+//    todo
+    public void countStatus() {
+
+    }
+
 }

@@ -37,7 +37,11 @@
 
         <div class="flex-row">
             <div class="cell">
-                <a href="<%=request.getContextPath()%>/edit_book?book_id=<c:out value='${book.bookId}'/>"><c:out value="${book.title}"/></a>
+                <form action="${pageContext.request.contextPath}/" method="post">
+                    <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                    <input type="hidden" name="action" value="view"/>
+                    <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
+                </form>
             </div>
             <div class="cell">
                 <c:out value="${book.authors}"/>
@@ -49,15 +53,20 @@
                 <c:out value="${book.amount}"/>
             </div>
             <div class="cell">
-                <a href="<%=request.getContextPath()%>/remove_book?book_id=<c:out value='${book.bookId}'/>">Remove</a>
+                <form action="${pageContext.request.contextPath}/" method="post">
+                    <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                    <input type="hidden" name="action" value="remove"/>
+                    <input type="submit" name="view" value="remove"/>
+                </form>
             </div>
         </div>
     </c:forEach>
 
 
-    <form class="button-add" action="<%=request.getContextPath()%>/add_book" method="get">
-        <button type="submit">Add Book</button>
-    </form>
+    <form class="button-add" action="${pageContext.request.contextPath}/" method="post">
+        <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+        <input type="hidden" name="action" value="add"/>
+        <input type="submit" name="add" value="add"/>
 </div>
 
 

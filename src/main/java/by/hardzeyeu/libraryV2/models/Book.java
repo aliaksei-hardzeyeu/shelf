@@ -103,11 +103,11 @@ public class Book {
         this.pageCount = pageCount;
     }
 
-    public String getISBN() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setISBN(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

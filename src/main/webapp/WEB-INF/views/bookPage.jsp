@@ -64,13 +64,73 @@
         <button onclick="window.location.href='/';">
             Discard changes
         </button>
-
-
     </div>
+
+    <div class="content-table">
+        <div class="flex-row">
+            <div class="cell">
+                Reader email
+            </div>
+            <div class="cell">
+                Reader name
+            </div>
+            <div class="cell">
+                Borrow date
+            </div>
+            <div class="cell">
+                Due date
+            </div>
+            <div class="cell">
+                Return date
+            </div>
+        </div>
+
+
+        <c:forEach var="book" items="${listOfBooks}">
+
+            <div class="flex-row">
+                <div class="cell">
+                    <form action="${pageContext.request.contextPath}/" method="post">
+                        <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                        <input type="hidden" name="action" value="view"/>
+                        <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
+                    </form>
+                </div>
+                <div class="cell">
+                    <c:out value="${book.authors}"/>
+                </div>
+                <div class="cell">
+                    <c:out value="${book.publDate}"/>
+                </div>
+                <div class="cell">
+                    <c:out value="${book.amount}"/>
+                </div>
+                <div class="cell">
+                    <form action="${pageContext.request.contextPath}/" method="post">
+                        <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                        <input type="hidden" name="action" value="remove"/>
+                        <input type="submit" name="view" value="remove"/>
+                    </form>
+                </div>
+            </div>
+        </c:forEach>
+
+
+        <form class="button-add" action="${pageContext.request.contextPath}/" method="post">
+            <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+            <input type="hidden" name="action" value="add"/>
+            <input type="submit" name="add" value="add"/>
+        </form>
+    </div>
+
+
+</body>
+
+
 </div>
-<div class="buttons-area">
-    buttons-area
-</div>
+<%--<div class="buttons-area">--%>
+<%--    buttons-area--%>
+<%--</div>--%>
 </body>
 </html>
 <%--<c:out value="${book.isbn}"/>--%>

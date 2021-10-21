@@ -67,6 +67,7 @@
         <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
         <input type="hidden" name="action" value="add"/>
         <input type="submit" name="add" value="add"/>
+    </form>
 </div>
 
 

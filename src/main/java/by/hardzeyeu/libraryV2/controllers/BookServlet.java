@@ -1,22 +1,20 @@
 package by.hardzeyeu.libraryV2.controllers;
 
 import by.hardzeyeu.libraryV2.models.Book;
-import by.hardzeyeu.libraryV2.services.BookServices;
+import by.hardzeyeu.libraryV2.services.implementations.BookServicesImpl;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "BookServlet", value = "/")
 public class BookServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServices bookServices = BookServices.getInstance();
-        request.setAttribute("listOfBooks", bookServices.getListOfBooks());
+        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+        request.setAttribute("listOfBooks", bookServicesImpl.getListOfBooks());
         request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
     }
 
@@ -50,8 +48,8 @@ public class BookServlet extends HttpServlet {
     }
 
     void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServices bookServices = BookServices.getInstance();
-        Book book = bookServices.getBook(Integer.parseInt(request.getParameter("bookId")));
+        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+        Book book = bookServicesImpl.getBook(Integer.parseInt(request.getParameter("bookId")));
         request.setAttribute("book", book);
         request.setAttribute("actionOnPage", "update");
         request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
@@ -60,7 +58,7 @@ public class BookServlet extends HttpServlet {
 
     void updateBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("START OF UPDATE METHOD");
-        BookServices bookServices = BookServices.getInstance();
+        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
@@ -74,20 +72,20 @@ public class BookServlet extends HttpServlet {
         int bookId = Integer.parseInt(request.getParameter("bookId"));
         System.out.println("MIDDLE OF UPDATE METHOD");
 
-        bookServices.updateBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount, bookId);
+        bookServicesImpl.updateBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount, bookId);
         System.out.println("END OF UPDATE METHOD");
         doGet(request, response);
     }
 
     void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServices bookServices = BookServices.getInstance();
+        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
-        bookServices.removeBook(Integer.parseInt(request.getParameter("bookId")));
+        bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("bookId")));
         doGet(request, response);
     }
 
     void addBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServices bookServices = BookServices.getInstance();
+        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
         System.out.println("START OF ADD METHOD");
 
         if (request.getParameter("title") == null) {
@@ -106,7 +104,7 @@ public class BookServlet extends HttpServlet {
         int amount = Integer.parseInt(request.getParameter("amount"));
         System.out.println("middle OF ADD METHOD");
 
-        bookServices.addBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount);
+        bookServicesImpl.addBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount);
         System.out.println("end OF ADD METHOD");
 
         doGet(request, response);

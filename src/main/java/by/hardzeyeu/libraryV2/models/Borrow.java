@@ -3,20 +3,21 @@ package by.hardzeyeu.libraryV2.models;
 import java.time.*;
 
 public class Borrow {
-    int id;
+    int bookId;
     String userName;
     String userEmail;
     LocalDate borrowDate;
     Period timePeriod;
     String status;
     String comment;
+    int borrowId;
 
-    public int getId() {
-        return id;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public String getUserName() {
@@ -65,5 +66,13 @@ public class Borrow {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getBorrowId() {
+        return borrowId;
+    }
+
+    public void setBorrowId(int borrowId) {
+        this.borrowId = borrowId;
     }
 }

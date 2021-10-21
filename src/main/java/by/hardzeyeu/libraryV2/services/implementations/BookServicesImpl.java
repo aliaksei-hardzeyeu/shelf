@@ -10,7 +10,6 @@ public class BookServicesImpl implements BookService {
     private static BookServicesImpl bookServicesImpl;
     private BookDAO bookDAO;
 
-
     private BookServicesImpl() {
         bookDAO = new BookDAO();
     }

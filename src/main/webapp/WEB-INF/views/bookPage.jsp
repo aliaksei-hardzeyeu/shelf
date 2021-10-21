@@ -18,7 +18,7 @@
     </div>
 
     <div class="table-values">
-        table-values
+       BOOK-FORM
 
         <form id="send-values" action="${pageContext.request.contextPath}/" method="post" >
             <label for="title">Title:</label>
@@ -122,12 +122,47 @@
             <input type="submit" name="add" value="add"/>
         </form>
     </div>
+    <div class="table-values">
+        BORROW-FORM
+
+        <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post" >
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<c:out value="${book.title}"/>"><br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<c:out value="${book.authors}"/>"><br>
+
+            <label for="borrowDate">Borrow Date:</label>
+            <input type="date" id="borrowDate" name="borrowDate" value="<c:out value="${book.publisher}"/>"><br>
+
+            <label for="period">Time period:</label>
+            <input type="date" id="period" name="period" value="<c:out value="${book.publDate}"/>"><br>
+
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" value="<c:out value="${book.genres}"/>"><br>
+
+            <label for="comment">Comment:</label>
+            <input type="text" id="comment" name="comment" value="<c:out value="${book.pageCount}"/>"><br>
 
 
+            <input type="hidden" id="bookIdBorrow" name="bookId" value="<c:out value="${book.bookId}"/>"><br>
+
+            <input type="hidden" name="action" value="${actionOnPage}"/>
+
+            <input type="submit" form="send-borrows" name="update" />
+        </form>
+
+
+        <button onclick="window.location.href='/';">
+            Discard changes
+        </button>
+    </div>
+
+</div>
 </body>
 
 
-</div>
+
 <%--<div class="buttons-area">--%>
 <%--    buttons-area--%>
 <%--</div>--%>

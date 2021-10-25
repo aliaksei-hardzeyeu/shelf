@@ -1,12 +1,17 @@
 package by.hardzeyeu.libraryV2.controllers;
 
 import by.hardzeyeu.libraryV2.models.Book;
+import by.hardzeyeu.libraryV2.models.Borrow;
+import by.hardzeyeu.libraryV2.services.BookService;
+import by.hardzeyeu.libraryV2.services.BorrowService;
 import by.hardzeyeu.libraryV2.services.implementations.BookServicesImpl;
+import by.hardzeyeu.libraryV2.services.implementations.BorrowServicesImpl;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "BookServlet", value = "/")
 public class BookServlet extends HttpServlet {
@@ -48,10 +53,26 @@ public class BookServlet extends HttpServlet {
     }
 
     void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-        Book book = bookServicesImpl.getBook(Integer.parseInt(request.getParameter("bookId")));
+        System.out.println("START OF view METHOD");
+
+        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        System.out.println("1 OF view METHOD");
+
+        BookService bookServicesImpl = BookServicesImpl.getInstance();
+        BorrowService borrowService = BorrowServicesImpl.getInstance();
+        System.out.println("2 OF view METHOD");
+
+
+        Book book = bookServicesImpl.getBook(bookId);
+        System.out.println("3 OF view METHOD");
+
+        List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
+
         request.setAttribute("book", book);
+        request.setAttribute("listOfBorrows", listOfBorrows);
         request.setAttribute("actionOnPage", "update");
+        System.out.println("end OF view METHOD");
+
         request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
 
     }
@@ -109,4 +130,6 @@ public class BookServlet extends HttpServlet {
 
         doGet(request, response);
     }
+
+
 }

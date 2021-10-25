@@ -7,10 +7,37 @@ public class Borrow {
     String userName;
     String userEmail;
     LocalDate borrowDate;
-    Period timePeriod;
+    int timePeriod;
     String status;
     String comment;
     int borrowId;
+    LocalDate dueDate;
+    LocalDate returnDate;
+    LocalDate changedStatusDate;
+
+    public LocalDate getChangedStatusDate() {
+        return changedStatusDate;
+    }
+
+    public void setChangedStatusDate(LocalDate changedStatusDate) {
+        this.changedStatusDate = changedStatusDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
 
     public int getBookId() {
         return bookId;
@@ -44,11 +71,11 @@ public class Borrow {
         this.borrowDate = borrowDate;
     }
 
-    public Period getTimePeriod() {
+    public int getTimePeriod() {
         return timePeriod;
     }
 
-    public void setTimePeriod(Period timePeriod) {
+    public void setTimePeriod(int timePeriod) {
         this.timePeriod = timePeriod;
     }
 

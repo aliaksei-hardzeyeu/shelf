@@ -12,15 +12,15 @@
 <body>
 <div class="main-container">
     <div class="cover">
-<%--        // using Web Server for Chrome due to security issues -> Chrome does not allow img viewing from local sources--%>
-<%--        // so we need to emulate server for local files!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!edit below--%>
-<%--        <img src="http://127.0.0.1:8887/${book.isbn}${book.coverExtension}" height=70% alt="cover_file">--%>
+        <%--        // using Web Server for Chrome due to security issues -> Chrome does not allow img viewing from local sources--%>
+        <%--        // so we need to emulate server for local files!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!edit below--%>
+        <%--        <img src="http://127.0.0.1:8887/${book.isbn}${book.coverExtension}" height=70% alt="cover_file">--%>
     </div>
 
     <div class="table-values">
-       BOOK-FORM
+        BOOK-FORM
 
-        <form id="send-values" action="${pageContext.request.contextPath}/" method="post" >
+        <form id="send-values" action="${pageContext.request.contextPath}/" method="post">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" value="<c:out value="${book.title}"/>"><br>
 
@@ -53,11 +53,11 @@
 
             <input type="hidden" name="action" value="${actionOnPage}"/>
 
-<%--            <div>--%>
-<%--                <label for="file">Choose a file</label>--%>
-<%--                <input type="file" id="file" name="file" accept="image/*">--%>
-<%--            </div>--%>
-            <input type="submit" form="send-values" name="update" />
+            <%--            <div>--%>
+            <%--                <label for="file">Choose a file</label>--%>
+            <%--                <input type="file" id="file" name="file" accept="image/*">--%>
+            <%--            </div>--%>
+            <input type="submit" form="send-values" name="update"/>
         </form>
 
 
@@ -86,32 +86,29 @@
         </div>
 
 
-        <c:forEach var="book" items="${listOfBooks}">
+        <c:forEach var="borrow" items="${listOfBorrows}">
 
             <div class="flex-row">
                 <div class="cell">
-                    <form action="${pageContext.request.contextPath}/" method="post">
-                        <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
-                        <input type="hidden" name="action" value="view"/>
-                        <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
-                    </form>
-                </div>
-                <div class="cell">
-                    <c:out value="${book.authors}"/>
-                </div>
-                <div class="cell">
-                    <c:out value="${book.publDate}"/>
-                </div>
-                <div class="cell">
-                    <c:out value="${book.amount}"/>
+                    <c:out value="${borrow.userEmail}"/>
                 </div>
                 <div class="cell">
                     <form action="${pageContext.request.contextPath}/" method="post">
-                        <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
-                        <input type="hidden" name="action" value="remove"/>
-                        <input type="submit" name="view" value="remove"/>
+                            <%--here should be modal window to switch status of borrow--%>
+                        <c:out value="${borrow.userName}"/>
+
                     </form>
                 </div>
+                <div class="cell">
+                    <c:out value="${borrow.borrowDate}"/>
+                </div>
+                <div class="cell">
+                    <c:out value="${borrow.dueDate}"/>
+                </div>
+                <div class="cell">
+                    <c:out value="${borrow.returnDate}"/>
+                </div>
+
             </div>
         </c:forEach>
 
@@ -125,31 +122,28 @@
     <div class="table-values">
         BORROW-FORM
 
-        <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post" >
+        <form id="send-borrows" action="${pageContext.request.contextPath}/BorrowServlet" method="post">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<c:out value="${book.title}"/>"><br>
+            <input type="email" id="email" name="email" value=""><br>
 
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="<c:out value="${book.authors}"/>"><br>
+            <input type="text" id="name" name="name" value=""><br>
 
-<%--            <label for="borrowDate">Borrow Date:</label>--%>
-<%--            <input type="date" id="borrowDate" name="borrowDate" value="<c:out value="${book.publisher}"/>"><br>--%>
+            <label for="borrowDate">Borrow Date:</label>
+            <input type="date" id="borrowDate" name="borrowDate" value=""><br>
 
             <label for="period">Time period:</label>
-            <input type="date" id="period" name="period" value="<c:out value="${book.publDate}"/>"><br>
+            <input type="int" id="period" name="period" value=""><br>
 
-<%--            <label for="status">Status:</label>--%>
-<%--            <input type="text" id="status" name="status" value="<c:out value="${book.genres}"/>"><br>--%>
+            <%--            <label for="status">Status:</label>--%>
+            <%--            <input type="text" id="status" name="status" value="<c:out value="${book.genres}"/>"><br>--%>
 
             <label for="comment">Comment:</label>
-            <input type="text" id="comment" name="comment" value="<c:out value="${book.pageCount}"/>"><br>
+            <input type="text" id="comment" name="comment" value=""><br>
 
-
-            <input type="hidden" id="bookIdBorrow" name="bookId" value="<c:out value="${book.bookId}"/>"><br>
-
-            <input type="hidden" name="action" value="${actionOnPage}"/>
-
-            <input type="submit" form="send-borrows" name="update" />
+            <input type="hidden" id="bookIdBorrow" name="bookId" value="${book.bookId}"><br>
+            <input type="hidden" name="action" value="view"/>
+            <input type="submit" form="send-borrows" name="submit"/>
         </form>
 
 
@@ -161,11 +155,4 @@
 </div>
 </body>
 
-
-
-<%--<div class="buttons-area">--%>
-<%--    buttons-area--%>
-<%--</div>--%>
-</body>
 </html>
-<%--<c:out value="${book.isbn}"/>--%>

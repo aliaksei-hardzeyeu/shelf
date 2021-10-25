@@ -37,7 +37,7 @@
 
         <div class="flex-row">
             <div class="cell">
-                <form action="${pageContext.request.contextPath}/" method="post">
+                <form action="${pageContext.request.contextPath}/" method="get">
                     <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
                     <input type="hidden" name="action" value="view"/>
                     <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>

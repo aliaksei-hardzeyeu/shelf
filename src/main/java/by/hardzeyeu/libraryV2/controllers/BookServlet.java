@@ -18,15 +18,70 @@ public class BookServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        System.out.println("doGET ACTION = " + action);
+        System.out.println("context bookId = " + getServletContext().getAttribute("bookId"));
+
+       if (action == null && (getServletContext().getAttribute("bookId") == null)) {
+           System.out.println("in 1 case");
+           viewMainPage(request, response);
+
+       } else if (action.equals("update") || action.equals("add")) {
+           System.out.println("in 2 case");
+          viewMainPage(request, response);
+
+
+       } else {
+           System.out.println("in 3 case");
+           request.setAttribute("bookId", getServletContext().getAttribute("bookId"));
+           viewBookPage(request, response);
+
+       }
+    }
+
+    void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+
         request.setAttribute("listOfBooks", bookServicesImpl.getListOfBooks());
+
         request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
+    }
+
+    void viewBookPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int bookId;
+
+        if (request.getParameter("bookId") == null) {
+            bookId = (Integer) getServletContext().getAttribute("bookId");
+            System.out.println("bookId from context = " + bookId);
+        } else {
+            bookId = Integer.parseInt(request.getParameter("bookId"));
+            System.out.println("BookId from request = " + bookId);
+        }
+
+        System.out.println("doGET viewBookPage 1");
+
+        BookService bookServicesImpl = BookServicesImpl.getInstance();
+        BorrowService borrowService = BorrowServicesImpl.getInstance();
+        System.out.println("doGET viewBookPage 2");
+
+
+        Book book = bookServicesImpl.getBook(bookId);
+        System.out.println("doGET viewBookPage 3");
+
+        List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
+
+        request.setAttribute("book", book);
+        request.setAttribute("listOfBorrows", listOfBorrows);
+        request.setAttribute("actionOnPage", "update");
+        System.out.println("doGET viewBookPage 4");
+
+        request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        System.out.println("DOPOST ACTION= " + action);
+        System.out.println("doPOST ACTION= " + action);
 
         switch (action) {
 

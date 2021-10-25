@@ -3,16 +3,18 @@ package by.hardzeyeu.libraryV2.controllers;
 import by.hardzeyeu.libraryV2.services.BorrowService;
 import by.hardzeyeu.libraryV2.services.implementations.BorrowServicesImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "BorrowServlet", value = "/BorrowServlet")
 public class BorrowServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/").forward(request, response);
+
     }
 
     @Override
@@ -26,8 +28,8 @@ public class BorrowServlet extends HttpServlet {
         String comment = request.getParameter("comment");
 
         borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
+        getServletContext().setAttribute("bookId", bookId);
 
-        request.setAttribute("actionOnPage", "view");
 
         response.sendRedirect("/");
     }

@@ -13,7 +13,7 @@ public interface BorrowService {
     List<Borrow> getListOfBorrows(int bookId);
 
 
-    void addBorrow(int bookId, String userName, String userEmail, LocalDate borrowDate, int timePeriod, String comment);
+    void addBorrow(int bookId, String userName, String userEmail, int timePeriod, String comment);
 
 
     void updateBorrow(String status, int borrowId);

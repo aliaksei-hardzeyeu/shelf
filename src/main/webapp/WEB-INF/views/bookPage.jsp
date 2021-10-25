@@ -67,6 +67,7 @@
     </div>
 
     <div class="content-table">
+        BORROWS TABLE
         <div class="flex-row">
             <div class="cell">
                 Reader email
@@ -113,12 +114,13 @@
         </c:forEach>
 
 
-        <form class="button-add" action="${pageContext.request.contextPath}/" method="post">
-            <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
-            <input type="hidden" name="action" value="add"/>
-            <input type="submit" name="add" value="add"/>
-        </form>
+<%--        <form class="button-add" action="${pageContext.request.contextPath}/" method="post">--%>
+<%--            <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>--%>
+<%--            <input type="hidden" name="action" value="add"/>--%>
+<%--            <input type="submit" name="add" value="add"/>--%>
+<%--        </form>--%>
     </div>
+
     <div class="table-values">
         BORROW-FORM
 
@@ -129,8 +131,8 @@
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value=""><br>
 
-            <label for="borrowDate">Borrow Date:</label>
-            <input type="date" id="borrowDate" name="borrowDate" value=""><br>
+<%--            <label for="borrowDate">Borrow Date:</label>--%>
+<%--            <input type="date" id="borrowDate" name="borrowDate" value=""><br>--%>
 
             <label for="period">Time period:</label>
             <input type="int" id="period" name="period" value=""><br>

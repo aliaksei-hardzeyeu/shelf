@@ -35,7 +35,7 @@ public class BorrowServicesImpl implements BorrowService {
     }
 
 
-    public void addBorrow(int bookId, String userName, String userEmail, LocalDate borrowDate, int timePeriod, String comment) {
+    public void addBorrow(int bookId, String userName, String userEmail, int timePeriod, String comment) {
         Date borrowDateSql = Utils.convertToSqlDateFromLocalDate(LocalDate.now());
         borrowDAO.addBorrow(bookId, userName, userEmail, borrowDateSql, timePeriod, comment);
     }

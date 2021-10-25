@@ -1,0 +1,71 @@
+.main-container {
+    display: flex;
+}
+
+.cover {
+    width: 5%;
+    height:  600px;
+    background-color: aqua;
+    border: 1px dashed red;
+}
+
+.table-values {
+    width: 30%;
+    height: 600px;
+    background-color: olive;
+    border: 1px dashed blue;
+}
+
+/*.buttons-area {*/
+/*    background-color: lightblue;*/
+/*    border: 1px dashed orange;*/
+/*    width: 60%;*/
+/*    height: 250px;*/
+/*}*/
+
+.value-cell {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 93%;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid black;
+}
+
+.content-table {
+    width: 40%;
+    height: 600px;
+    background-color: lightblue;
+    border: 1px dashed blue;
+}
+
+.flex-row {
+    display: flex;
+}
+
+.cell {
+    text-align: center;
+    height: 50px;
+    line-height: normal;
+    border: 1px solid black;
+    width: 15%;
+    flex-grow: 1;
+}
+
+.cell-color-bisque {
+    background-color: bisque;
+}
+
+.cell-color-grey {
+    background-color: lightgray;
+    align-content: center;
+    text-align: -moz-center;
+}
+
+.button-add {
+    align-self: center;
+    position: absolute;
+    left: 30%;
+    bottom:-20% ;
+}

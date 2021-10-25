@@ -46,7 +46,7 @@ public class BorrowDAO {
         borrow.setUserName(result.getString("user_name"));
         borrow.setUserEmail(result.getString("user_email"));
         borrow.setBorrowDate(convertToLocalDateViaSqlDate(result.getDate("date")));
-        borrow.setTimePeriod(result.getDate("isbn")); //todo UTIL -> date to time period
+//        borrow.setTimePeriod(result.getDate("isbn")); //todo UTIL -> date to time period
         borrow.setStatus(result.getString("status"));
         borrow.setBorrowId(result.getInt("borrow_id"));
     }
@@ -64,8 +64,8 @@ public class BorrowDAO {
             preparedStatement.setInt(1, bookId);
             preparedStatement.setString(2, userName);
             preparedStatement.setString(3, userEmail);
-            preparedStatement.setDate(4, borrowDate);//todo разобраться с датами и временем
-            preparedStatement.setString(5, timePeriod);//todo разобраться с датами и временем
+//            preparedStatement.setDate(4, borrowDate);//todo разобраться с датами и временем
+//            preparedStatement.setString(5, timePeriod);//todo разобраться с датами и временем
             preparedStatement.setString(6, status);
             preparedStatement.setString(7, comment);
 

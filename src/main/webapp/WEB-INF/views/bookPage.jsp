@@ -144,14 +144,12 @@
             <input type="text" id="comment" name="comment" value=""><br>
 
             <input type="hidden" id="bookIdBorrow" name="bookId" value="${book.bookId}"><br>
-            <input type="hidden" name="action" value="view"/>
+            <input type="hidden" name="action" value="add"/>
             <input type="submit" form="send-borrows" name="submit"/>
+
+            <input type="reset" value="Discard">
         </form>
 
-
-        <button onclick="window.location.href='/';">
-            Discard changes
-        </button>
     </div>
 
 </div>

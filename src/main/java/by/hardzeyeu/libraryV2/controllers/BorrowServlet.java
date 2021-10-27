@@ -28,9 +28,9 @@ public class BorrowServlet extends HttpServlet {
         String comment = request.getParameter("comment");
 
         borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
-        getServletContext().setAttribute("bookId", bookId);
+        request.setAttribute("action", "view");
+        request.setAttribute("type", "old");
+        request.getRequestDispatcher("/").forward(request, response);
 
-
-        response.sendRedirect("/");
     }
 }

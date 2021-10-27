@@ -7,9 +7,11 @@ import by.hardzeyeu.libraryV2.services.BorrowService;
 import by.hardzeyeu.libraryV2.services.implementations.BookServicesImpl;
 import by.hardzeyeu.libraryV2.services.implementations.BorrowServicesImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,73 +19,22 @@ import java.util.List;
 public class BookServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        System.out.println("doGET ACTION = " + action);
-        System.out.println("context bookId = " + getServletContext().getAttribute("bookId"));
-
-       if (action == null && (getServletContext().getAttribute("bookId") == null)) {
-           System.out.println("in 1 case");
-           viewMainPage(request, response);
-
-       } else if (action.equals("update") || action.equals("add")) {
-           System.out.println("in 2 case");
-          viewMainPage(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
 
 
-       } else {
-           System.out.println("in 3 case");
-           request.setAttribute("bookId", getServletContext().getAttribute("bookId"));
-           viewBookPage(request, response);
-
-       }
-    }
-
-    void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-
-        request.setAttribute("listOfBooks", bookServicesImpl.getListOfBooks());
-
-        request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
-    }
-
-    void viewBookPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int bookId;
-
-        if (request.getParameter("bookId") == null) {
-            bookId = (Integer) getServletContext().getAttribute("bookId");
-            System.out.println("bookId from context = " + bookId);
-        } else {
-            bookId = Integer.parseInt(request.getParameter("bookId"));
-            System.out.println("BookId from request = " + bookId);
-        }
-
-        System.out.println("doGET viewBookPage 1");
-
-        BookService bookServicesImpl = BookServicesImpl.getInstance();
-        BorrowService borrowService = BorrowServicesImpl.getInstance();
-        System.out.println("doGET viewBookPage 2");
-
-
-        Book book = bookServicesImpl.getBook(bookId);
-        System.out.println("doGET viewBookPage 3");
-
-        List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
-
-        request.setAttribute("book", book);
-        request.setAttribute("listOfBorrows", listOfBorrows);
-        request.setAttribute("actionOnPage", "update");
-        System.out.println("doGET viewBookPage 4");
-
-        request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        System.out.println("doPOST ACTION= " + action);
+        System.out.println("doGET ACTION= " + action);
 
-        switch (action) {
+        switch (action == null ? "mainPage" : action) {
+
+            case "mainPage":
+                viewMainPage(request, response);
+                break;
 
             case "view":
                 viewBook(request, response);
@@ -100,36 +51,61 @@ public class BookServlet extends HttpServlet {
             case "add":
                 addBook(request, response);
                 break;
-
-            default:
-                throw new ServletException("Invalid action parameter");
         }
+    }
 
+    void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("start of viewMainPage method");
+        BookService bookServicesImpl = BookServicesImpl.getInstance();
+        List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
+//        if (listOfBooks == null) {
+//            System.out.println("listOfBooks = null");
+//        } else {
+//            for (Book b : listOfBooks) {
+//                System.out.println(b.toString());
+//            }
+//        }
+        request.setAttribute("listOfBooks", listOfBooks);
+        System.out.println("end of viewMainPage method");
+
+        System.out.println("end-end of viewMainPage method");
+        request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
     }
 
     void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("START OF view METHOD");
 
-        int bookId = Integer.parseInt(request.getParameter("bookId"));
-        System.out.println("1 OF view METHOD");
 
-        BookService bookServicesImpl = BookServicesImpl.getInstance();
-        BorrowService borrowService = BorrowServicesImpl.getInstance();
-        System.out.println("2 OF view METHOD");
+        String type = request.getParameter("type");
+
+        if (type.equals("new")) {
+
+            request.setAttribute("actionOnPage", "add");
+            request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
+
+        } else if (type.equals("old")){
+            System.out.println("1 OF view METHOD");
 
 
-        Book book = bookServicesImpl.getBook(bookId);
-        System.out.println("3 OF view METHOD");
+            int bookId = Integer.parseInt(request.getParameter("bookId"));
 
-        List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
+            BookService bookServicesImpl = BookServicesImpl.getInstance();
+            BorrowService borrowService = BorrowServicesImpl.getInstance();
+            System.out.println("2 OF view METHOD");
 
-        request.setAttribute("book", book);
-        request.setAttribute("listOfBorrows", listOfBorrows);
-        request.setAttribute("actionOnPage", "update");
-        System.out.println("end OF view METHOD");
 
-        request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
+            Book book = bookServicesImpl.getBook(bookId);
+            System.out.println("3 OF view METHOD");
 
+            List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
+
+            request.setAttribute("book", book);
+            request.setAttribute("listOfBorrows", listOfBorrows);
+            request.setAttribute("actionOnPage", "update");
+            System.out.println("end OF view METHOD");
+
+            request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
+        }
     }
 
     void updateBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -150,24 +126,20 @@ public class BookServlet extends HttpServlet {
 
         bookServicesImpl.updateBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount, bookId);
         System.out.println("END OF UPDATE METHOD");
-        doGet(request, response);
+        viewMainPage(request, response);
     }
 
     void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("bookId")));
-        doGet(request, response);
+        viewMainPage(request, response);
     }
 
     void addBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
         System.out.println("START OF ADD METHOD");
 
-        if (request.getParameter("title") == null) {
-            request.setAttribute("actionOnPage", "add");
-            request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
-        }
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
@@ -183,7 +155,8 @@ public class BookServlet extends HttpServlet {
         bookServicesImpl.addBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount);
         System.out.println("end OF ADD METHOD");
 
-        doGet(request, response);
+        request.setAttribute("action", null);
+        viewMainPage(request, response);
     }
 
 

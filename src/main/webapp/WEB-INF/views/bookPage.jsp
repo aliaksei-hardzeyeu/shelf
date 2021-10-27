@@ -124,7 +124,7 @@
     <div class="table-values">
         BORROW-FORM
 
-        <form id="send-borrows" action="${pageContext.request.contextPath}/BorrowServlet" method="post">
+        <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" value=""><br>
 
@@ -144,7 +144,8 @@
             <input type="text" id="comment" name="comment" value=""><br>
 
             <input type="hidden" id="bookIdBorrow" name="bookId" value="${book.bookId}"><br>
-            <input type="hidden" name="action" value="add"/>
+            <input type="hidden" name="action" value="addBorrow"/>
+            <input type="hidden" name="type" value="old"/>
             <input type="submit" form="send-borrows" name="submit"/>
 
             <input type="reset" value="Discard">

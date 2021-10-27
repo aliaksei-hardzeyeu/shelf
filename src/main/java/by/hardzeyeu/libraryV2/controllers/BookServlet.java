@@ -51,6 +51,10 @@ public class BookServlet extends HttpServlet {
             case "add":
                 addBook(request, response);
                 break;
+
+            case "addBorrow":
+                addBorrow(request, response);
+                break;
         }
     }
 
@@ -157,6 +161,24 @@ public class BookServlet extends HttpServlet {
 
         request.setAttribute("action", null);
         viewMainPage(request, response);
+    }
+
+
+    void addBorrow(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+        BorrowService borrowService = BorrowServicesImpl.getInstance();
+        System.out.println("addborrow 1");
+        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        String userName = request.getParameter("name");
+        String userEmail = request.getParameter("email");
+        int timePeriod = Integer.parseInt(request.getParameter("period"));
+        String comment = request.getParameter("comment");
+        System.out.println("addborrow 2");
+
+        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
+
+        System.out.println("addborrow 3");
+
+        viewBook(request, response);
     }
 
 

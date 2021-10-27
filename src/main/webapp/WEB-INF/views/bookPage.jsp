@@ -113,45 +113,54 @@
             </div>
         </c:forEach>
 
+        <a href="#openModal">Add borrow</a>
 
-<%--        <form class="button-add" action="${pageContext.request.contextPath}/" method="post">--%>
-<%--            <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>--%>
-<%--            <input type="hidden" name="action" value="add"/>--%>
-<%--            <input type="submit" name="add" value="add"/>--%>
-<%--        </form>--%>
+        <div id="openModal" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">New borrow</h3>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <div class="table-values">
+                            BORROW-FORM
+
+                            <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" value=""><br>
+
+
+                                <label for="name">Name:</label>
+                                <input type="text" id="name" name="name" value=""><br>
+
+
+                                <label for="period">Time period:</label>
+                                <input type="int" id="period" name="period" value=""><br>
+
+
+                                <label for="comment">Comment:</label>
+                                <input type="text" id="comment" name="comment" value=""><br>
+
+                                <input type="hidden" id="bookIdBorrow" name="bookId" value="${book.bookId}"><br>
+                                <input type="hidden" name="action" value="addBorrow"/>
+                                <input type="hidden" name="type" value="old"/>
+                                <input type="submit" form="send-borrows" name="submit"/>
+
+                                <a href="#close" title="Close" class="close">Discard</a>
+                            </form>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="table-values">
-        BORROW-FORM
-
-        <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value=""><br>
-
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value=""><br>
-
-<%--            <label for="borrowDate">Borrow Date:</label>--%>
-<%--            <input type="date" id="borrowDate" name="borrowDate" value=""><br>--%>
-
-            <label for="period">Time period:</label>
-            <input type="int" id="period" name="period" value=""><br>
-
-            <%--            <label for="status">Status:</label>--%>
-            <%--            <input type="text" id="status" name="status" value="<c:out value="${book.genres}"/>"><br>--%>
-
-            <label for="comment">Comment:</label>
-            <input type="text" id="comment" name="comment" value=""><br>
-
-            <input type="hidden" id="bookIdBorrow" name="bookId" value="${book.bookId}"><br>
-            <input type="hidden" name="action" value="addBorrow"/>
-            <input type="hidden" name="type" value="old"/>
-            <input type="submit" form="send-borrows" name="submit"/>
-
-            <input type="reset" value="Discard">
-        </form>
-
-    </div>
 
 </div>
 </body>

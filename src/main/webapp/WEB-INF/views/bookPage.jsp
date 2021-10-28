@@ -48,6 +48,9 @@
             <label for="amount">Total amount:</label>
             <input type="number" id="amount" name="amount" value="<c:out value="${book.amount}"/>"><br>
 
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" value="<c:out value="${book.status}"/>" readonly><br>
+
 
             <input type="hidden" id="bookId" name="bookId" value="<c:out value="${book.bookId}"/>"><br>
 
@@ -94,8 +97,8 @@
                     <c:out value="${borrow.userEmail}"/>
                 </div>
                 <div class="cell">
-                            <%--here should be modal window to switch status of borrow--%>
-                       <a href="#openModal2"><c:out value="${borrow.userName}"/></a>
+                        <%--here should be modal window to switch status of borrow--%>
+                    <a href="#openModal2"><c:out value="${borrow.userName}"/></a>
 
                 </div>
                 <div class="cell">
@@ -108,6 +111,45 @@
                     <c:out value="${borrow.returnDate}"/>
                 </div>
 
+            </div>
+            <div id="openModal2" class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Borrow status</h3>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <form method="post" action="/borrow">
+                                <p>Please select borrow status:</p>
+                                <div>
+                                    <input type="radio" id="statusChoice1"
+                                           name="status" value="returned">
+                                    <label for="statusChoice1">Returned</label>
+
+                                    <input type="radio" id="statusChoice2"
+                                           name="status" value="damaged">
+                                    <label for="statusChoice2">Returned & damaged</label>
+
+                                    <input type="radio" id="statusChoice3"
+                                           name="status" value="lost">
+                                    <label for="statusChoice3">Lost</label>
+
+                                    <input type="hidden" id="borrowId3" name="borrowId" value="${borrow.borrowId}">
+                                    <input type="hidden" id="action" name="action" value="changeStatus">
+
+                                </div>
+                                <div>
+                                    <button type="submit">Submit</button>
+                                </div>
+                            </form>
+
+
+                            <a href="#close" title="Close" class="close">Discard</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </c:forEach>
 
@@ -158,53 +200,14 @@
         </div>
 
 
-        <div id="openModal2" class="modal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Borrow status</h3>
-                    </div>
-                    <div class="modal-body">
 
-
-                        <form method="post" action="/BorrowServlet">
-                            <p>Please select borrow status:</p>
-                            <div>
-                                <input type="radio" id="statusChoice1"
-                                       name="status" value="returned">
-                                <label for="statusChoice1">Returned</label>
-
-                                <input type="radio" id="statusChoice2"
-                                       name="status" value="damaged">
-                                <label for="statusChoice2">Returned & damaged</label>
-
-                                <input type="radio" id="statusChoice3"
-                                       name="status" value="lost">
-                                <label for="statusChoice3">Lost</label>
-
-                                <input type="hidden" id="borrowId3" name="borrowId" value="${borrow.borrowId}">
-
-                            </div>
-                            <div>
-                                <button type="submit">Submit</button>
-                            </div>
-                        </form>
-
-
-                        <a href="#close" title="Close" class="close">Discard</a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
 
 </div>
 <script>
-    if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
-    }
+
 </script>
 </body>
 

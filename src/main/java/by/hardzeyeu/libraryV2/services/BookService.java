@@ -19,6 +19,6 @@ public interface BookService {
     void removeBook(int book_id);
 
 
-    void countStatus();
+    void setStatus();
 
 }

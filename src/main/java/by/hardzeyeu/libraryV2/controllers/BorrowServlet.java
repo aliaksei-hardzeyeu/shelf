@@ -28,6 +28,8 @@ public class BorrowServlet extends HttpServlet {
                 addBorrow(request, response);
                 break;
 
+            case "changeStatus":
+                changeStatus(request, response);
 
         }
     }
@@ -50,5 +52,10 @@ public class BorrowServlet extends HttpServlet {
         System.out.println("addborrow 3");
 
         response.sendRedirect("http://localhost:8081/?action=view&type=old&bookId=" + bookId);
+    }
+
+
+    void changeStatus(HttpServletRequest request, HttpServletResponse response) {
+
     }
 }

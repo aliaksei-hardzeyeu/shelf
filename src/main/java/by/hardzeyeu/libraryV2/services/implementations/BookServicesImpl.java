@@ -43,8 +43,8 @@ public class BookServicesImpl implements BookService {
         bookDAO.removeBook(book_id);
     }
 
-//    todo
-    public void countStatus() {
+
+    public void setStatus() {
 
     }
 

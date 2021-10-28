@@ -62,13 +62,6 @@ public class BookServlet extends HttpServlet {
         System.out.println("start of viewMainPage method");
         BookService bookServicesImpl = BookServicesImpl.getInstance();
         List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
-//        if (listOfBooks == null) {
-//            System.out.println("listOfBooks = null");
-//        } else {
-//            for (Book b : listOfBooks) {
-//                System.out.println(b.toString());
-//            }
-//        }
         request.setAttribute("listOfBooks", listOfBooks);
         System.out.println("end of viewMainPage method");
 
@@ -162,24 +155,4 @@ public class BookServlet extends HttpServlet {
         request.setAttribute("action", null);
         viewMainPage(request, response);
     }
-
-
-//    void addBorrow(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
-//        BorrowService borrowService = BorrowServicesImpl.getInstance();
-//        System.out.println("addborrow 1");
-//        int bookId = Integer.parseInt(request.getParameter("bookId"));
-//        String userName = request.getParameter("name");
-//        String userEmail = request.getParameter("email");
-//        int timePeriod = Integer.parseInt(request.getParameter("period"));
-//        String comment = request.getParameter("comment");
-//        System.out.println("addborrow 2");
-//
-//        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
-//
-//        System.out.println("addborrow 3");
-//
-//        viewBook(request, response);
-//    }
-
-
 }

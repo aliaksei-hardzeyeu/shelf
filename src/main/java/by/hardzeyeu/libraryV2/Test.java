@@ -1,21 +1,16 @@
 package by.hardzeyeu.libraryV2;
 
+import by.hardzeyeu.libraryV2.dao.BorrowDAO;
+import by.hardzeyeu.libraryV2.dto.StatusWorker;
+
 public class Test {
 
     public static void main(String[] args) {
-        System.out.println(f(3));
+        BorrowDAO bd = new BorrowDAO();
+        StatusWorker sw = bd.getDataForStatusWorker();
+
+        System.out.println(sw.toString());
 
 
     }
-
-    static int f(int n) {
-        if (n == 0) {
-            return 1;
-        }
-
-        return n = n * f(n - 1);
-
-    }
-
-
 }

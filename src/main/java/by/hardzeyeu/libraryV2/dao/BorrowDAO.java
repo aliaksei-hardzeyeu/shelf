@@ -2,6 +2,7 @@ package by.hardzeyeu.libraryV2.dao;
 
 import by.hardzeyeu.libraryV2.connection.C3P0DataSource;
 import by.hardzeyeu.libraryV2.models.Borrow;
+import by.hardzeyeu.libraryV2.dto.StatusWorker;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,5 +97,34 @@ public class BorrowDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public StatusWorker getDataForStatusWorker() {
+        String query =
+         "SELECT COUNT(IF(status='damaged', 1, null)) 'damaged', " +
+                 "COUNT(IF(status ='lost', 1, null)) 'lost', " +
+                 "COUNT(IF(status ='returned', 1, null)) 'returned', " +
+                 "COUNT(IF(status = NULL, 1, null)) 'borrowed' FROM borrows;";
+
+        StatusWorker statusWorker = new StatusWorker();
+
+        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                statusWorker.setDamaged(result.getInt("damaged"));
+                statusWorker.setLost(result.getInt("lost"));
+                statusWorker.setReturned(result.getInt("returned"));
+                statusWorker.setBorrowed(result.getInt("borrowed"));
+            };
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return statusWorker;
     }
 }

@@ -94,11 +94,9 @@
                     <c:out value="${borrow.userEmail}"/>
                 </div>
                 <div class="cell">
-                    <form action="${pageContext.request.contextPath}/" method="post">
                             <%--here should be modal window to switch status of borrow--%>
-                        <c:out value="${borrow.userName}"/>
+                       <a href="#openModal2"><c:out value="${borrow.userName}"/></a>
 
-                    </form>
                 </div>
                 <div class="cell">
                     <c:out value="${borrow.borrowDate}"/>
@@ -113,9 +111,9 @@
             </div>
         </c:forEach>
 
-        <a href="#openModal">Add borrow</a>
+        <a href="#openModal1">Add borrow</a>
 
-        <div id="openModal" class="modal">
+        <div id="openModal1" class="modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -127,7 +125,7 @@
                         <div class="table-values">
                             BORROW-FORM
 
-                            <form id="send-borrows" action="${pageContext.request.contextPath}/" method="post">
+                            <form id="send-borrows" action="${pageContext.request.contextPath}/borrow" method="post">
                                 <label for="email">Email:</label>
                                 <input type="email" id="email" name="email" value=""><br>
 
@@ -159,10 +157,55 @@
             </div>
         </div>
 
+
+        <div id="openModal2" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Borrow status</h3>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <form method="post" action="/BorrowServlet">
+                            <p>Please select borrow status:</p>
+                            <div>
+                                <input type="radio" id="statusChoice1"
+                                       name="status" value="returned">
+                                <label for="statusChoice1">Returned</label>
+
+                                <input type="radio" id="statusChoice2"
+                                       name="status" value="damaged">
+                                <label for="statusChoice2">Returned & damaged</label>
+
+                                <input type="radio" id="statusChoice3"
+                                       name="status" value="lost">
+                                <label for="statusChoice3">Lost</label>
+
+                                <input type="hidden" id="borrowId3" name="borrowId" value="${borrow.borrowId}">
+
+                            </div>
+                            <div>
+                                <button type="submit">Submit</button>
+                            </div>
+                        </form>
+
+
+                        <a href="#close" title="Close" class="close">Discard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
 </div>
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
 </body>
 
 </html>

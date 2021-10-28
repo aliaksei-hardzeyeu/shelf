@@ -20,10 +20,26 @@ public class BookServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        String action = request.getParameter("action");
+        System.out.println("doPOST ACTION= " + action);
 
+        switch (action == null ? "mainPage" : action) {
 
+            case "update":
+                updateBook(request, response);
+                break;
+
+            case "remove":
+                removeBook(request, response);
+                break;
+
+            case "add":
+                addBook(request, response);
+                break;
+
+        }
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,22 +54,6 @@ public class BookServlet extends HttpServlet {
 
             case "view":
                 viewBook(request, response);
-                break;
-
-            case "update":
-                updateBook(request, response);
-                break;
-
-            case "remove":
-                removeBook(request, response);
-                break;
-
-            case "add":
-                addBook(request, response);
-                break;
-
-            case "addBorrow":
-                addBorrow(request, response);
                 break;
         }
     }
@@ -164,22 +164,22 @@ public class BookServlet extends HttpServlet {
     }
 
 
-    void addBorrow(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
-        BorrowService borrowService = BorrowServicesImpl.getInstance();
-        System.out.println("addborrow 1");
-        int bookId = Integer.parseInt(request.getParameter("bookId"));
-        String userName = request.getParameter("name");
-        String userEmail = request.getParameter("email");
-        int timePeriod = Integer.parseInt(request.getParameter("period"));
-        String comment = request.getParameter("comment");
-        System.out.println("addborrow 2");
-
-        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
-
-        System.out.println("addborrow 3");
-
-        viewBook(request, response);
-    }
+//    void addBorrow(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+//        BorrowService borrowService = BorrowServicesImpl.getInstance();
+//        System.out.println("addborrow 1");
+//        int bookId = Integer.parseInt(request.getParameter("bookId"));
+//        String userName = request.getParameter("name");
+//        String userEmail = request.getParameter("email");
+//        int timePeriod = Integer.parseInt(request.getParameter("period"));
+//        String comment = request.getParameter("comment");
+//        System.out.println("addborrow 2");
+//
+//        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
+//
+//        System.out.println("addborrow 3");
+//
+//        viewBook(request, response);
+//    }
 
 
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "BorrowServlet", value = "/BorrowServlet")
+@WebServlet(name = "BorrowServlet", value = "/borrow")
 public class BorrowServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,18 +19,36 @@ public class BorrowServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        BorrowService borrowService = BorrowServicesImpl.getInstance();
-//
-//        int bookId = Integer.parseInt(request.getParameter("bookId"));
-//        String userName = request.getParameter("name");
-//        String userEmail = request.getParameter("email");
-//        int timePeriod = Integer.parseInt(request.getParameter("period"));
-//        String comment = request.getParameter("comment");
-//
-//        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
-//        request.setAttribute("action", "view");
-//        request.setAttribute("type", "old");
-//        request.getRequestDispatcher("/").forward(request, response);
+        String action = request.getParameter("action");
+        System.out.println("doPOST ACTION= " + action);
 
+        switch (action == null ? "mainPage" : action) {
+
+            case "addBorrow":
+                addBorrow(request, response);
+                break;
+
+
+        }
+    }
+
+    void addBorrow(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("addborrow 0");
+
+        BorrowService borrowService = BorrowServicesImpl.getInstance();
+
+        System.out.println("addborrow 1");
+        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        String userName = request.getParameter("name");
+        String userEmail = request.getParameter("email");
+        int timePeriod = Integer.parseInt(request.getParameter("period"));
+        String comment = request.getParameter("comment");
+        System.out.println("addborrow 2");
+
+        borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
+
+        System.out.println("addborrow 3");
+
+        response.sendRedirect("http://localhost:8081/?action=view&type=old&bookId=" + bookId);
     }
 }

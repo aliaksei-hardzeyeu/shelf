@@ -39,7 +39,7 @@
             <div class="cell">
                 <form action="${pageContext.request.contextPath}/" method="get">
                     <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
-                    <input type="hidden" name="type" value="old"/>
+                    <input type="hidden" name="type" value="existing"/>
                     <input type="hidden" name="action" value="view"/>
                     <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
                 </form>

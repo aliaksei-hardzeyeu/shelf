@@ -1,10 +1,24 @@
 package by.hardzeyeu.libraryV2.dto;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+
 public class StatusWorker {
     int returned;
     int damaged;
     int lost;
     int borrowed;
+
+    HashMap<Integer, LocalDate> borrowDates;
+
+    public HashMap<Integer, LocalDate> getBorrowDates() {
+        return borrowDates;
+    }
+
+    public void setBorrowDates(HashMap<Integer, LocalDate> borrowDates) {
+        this.borrowDates = borrowDates;
+    }
 
     public int getReturned() {
         return returned;

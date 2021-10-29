@@ -36,7 +36,6 @@ public class BookServlet extends HttpServlet {
             case "add":
                 addBook(request, response);
                 break;
-
         }
     }
 
@@ -80,21 +79,23 @@ public class BookServlet extends HttpServlet {
             request.setAttribute("actionOnPage", "add");
             request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
 
-        } else if (type.equals("old")){
+        } else if (type.equals("existing")){
             System.out.println("1 OF view METHOD");
 
 
             int bookId = Integer.parseInt(request.getParameter("bookId"));
 
             BookService bookServicesImpl = BookServicesImpl.getInstance();
-            BorrowService borrowService = BorrowServicesImpl.getInstance();
+            BorrowService borrowServiceImpl = BorrowServicesImpl.getInstance();
             System.out.println("2 OF view METHOD");
 
 
             Book book = bookServicesImpl.getBook(bookId);
+            //todo set status setStatus(Book book)
+
             System.out.println("3 OF view METHOD");
 
-            List<Borrow> listOfBorrows = borrowService.getListOfBorrows(bookId);
+            List<Borrow> listOfBorrows = borrowServiceImpl.getListOfBorrows(bookId);
 
             request.setAttribute("book", book);
             request.setAttribute("listOfBorrows", listOfBorrows);

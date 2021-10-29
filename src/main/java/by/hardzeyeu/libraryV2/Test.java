@@ -7,9 +7,9 @@ public class Test {
 
     public static void main(String[] args) {
         BorrowDAO bd = new BorrowDAO();
-        StatusWorker sw = bd.getDataForStatusWorker();
+//        StatusWorker sw = bd.getDataForStatusWorker;
 
-        System.out.println(sw.toString());
+//        System.out.println(sw.toString());
 
 
     }

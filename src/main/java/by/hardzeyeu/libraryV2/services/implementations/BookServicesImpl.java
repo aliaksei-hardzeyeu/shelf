@@ -39,13 +39,11 @@ public class BookServicesImpl implements BookService {
         bookDAO.updateBook(title, publisher, page_count, isbn, des, publDate, authors, genres, amount, book_id);
     }
 
-    public void removeBook(int book_id) {
-        bookDAO.removeBook(book_id);
+    public void removeBook(int bookId) {
+        bookDAO.removeBook(bookId);
     }
 
 
-    public void setStatus() {
 
-    }
 
 }

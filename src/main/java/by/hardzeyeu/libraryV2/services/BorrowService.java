@@ -1,5 +1,6 @@
 package by.hardzeyeu.libraryV2.services;
 
+import by.hardzeyeu.libraryV2.models.Book;
 import by.hardzeyeu.libraryV2.models.Borrow;
 
 import java.sql.Date;
@@ -17,5 +18,9 @@ public interface BorrowService {
 
 
     void updateBorrow(String status, int borrowId);
+
+
+    public void setStatus(Book book);
+
 
 }

@@ -152,24 +152,3 @@ public class BookDAO {
         }
     }
 }
-/**
- * Old method with isbn
- */
-//    public List<Book> getListOfAllBooks() {
-//        List<Book> listOfBooks = new ArrayList<>();
-//        String query = "SELECT isbn FROM books";
-//
-//        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
-//            Statement statement = connection.createStatement();
-//            ResultSet result = statement.executeQuery(query);
-//
-//            while (result.next()) {
-//                Book book = getBook(result.getString("isbn"));
-//                listOfBooks.add(book);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return listOfBooks;
-//    }

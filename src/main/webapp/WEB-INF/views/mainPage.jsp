@@ -64,7 +64,7 @@
     </c:forEach>
 
 
-    <form class="button-add" action="${pageContext.request.contextPath}/" method="post">
+    <form class="button-add" action="${pageContext.request.contextPath}/" method="get">
         <input type="hidden" name="action" value="view"/>
         <input type="hidden" name="type" value="new"/>
         <input type="submit" name="add" value="ADD"/>

@@ -23,6 +23,7 @@
           <element id="library" level="project" name="Maven: javax.mvc:javax.mvc-api:1.0.0" />
           <element id="library" level="project" name="Maven: com.mchange:c3p0:0.9.5.5" />
           <element id="library" level="project" name="Maven: com.mchange:mchange-commons-java:0.2.19" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.32" />
         </element>
       </element>
       <element id="directory" name="META-INF">

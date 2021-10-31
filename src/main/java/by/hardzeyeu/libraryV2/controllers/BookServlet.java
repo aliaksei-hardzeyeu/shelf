@@ -1,11 +1,8 @@
 package by.hardzeyeu.libraryV2.controllers;
 
 import by.hardzeyeu.libraryV2.models.Book;
-import by.hardzeyeu.libraryV2.models.Borrow;
 import by.hardzeyeu.libraryV2.services.BookService;
-import by.hardzeyeu.libraryV2.services.BorrowService;
 import by.hardzeyeu.libraryV2.services.implementations.BookServicesImpl;
-import by.hardzeyeu.libraryV2.services.implementations.BorrowServicesImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -83,22 +80,17 @@ public class BookServlet extends HttpServlet {
             System.out.println("1 OF view METHOD");
 
 
-            int bookId = Integer.parseInt(request.getParameter("bookId"));
+            int id = Integer.parseInt(request.getParameter("id"));
 
             BookService bookServicesImpl = BookServicesImpl.getInstance();
-            BorrowService borrowServiceImpl = BorrowServicesImpl.getInstance();
             System.out.println("2 OF view METHOD");
 
-
-            Book book = bookServicesImpl.getBook(bookId);
-            //todo set status setStatus(Book book)
+            Book book = bookServicesImpl.getBook(id);
 
             System.out.println("3 OF view METHOD");
 
-            List<Borrow> listOfBorrows = borrowServiceImpl.getListOfBorrows(bookId);
 
             request.setAttribute("book", book);
-            request.setAttribute("listOfBorrows", listOfBorrows);
             request.setAttribute("actionOnPage", "update");
             System.out.println("end OF view METHOD");
 
@@ -112,17 +104,11 @@ public class BookServlet extends HttpServlet {
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
-        int pageCount = Integer.parseInt(request.getParameter("pageCount"));
-        String isbn = request.getParameter("isbn");
-        String des = request.getParameter("description");
-        String publDate = request.getParameter("publDate");
-        String authors = request.getParameter("authors");
-        String genres = request.getParameter("genres");
-        int amount = Integer.parseInt(request.getParameter("amount"));
-        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        String author = request.getParameter("author");
+        int id = Integer.parseInt(request.getParameter("id"));
         System.out.println("MIDDLE OF UPDATE METHOD");
 
-        bookServicesImpl.updateBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount, bookId);
+        bookServicesImpl.updateBook(title, publisher, author, id);
         System.out.println("END OF UPDATE METHOD");
         viewMainPage(request, response);
     }
@@ -130,7 +116,7 @@ public class BookServlet extends HttpServlet {
     void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
-        bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("bookId")));
+        bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("id")));
         viewMainPage(request, response);
     }
 
@@ -138,19 +124,12 @@ public class BookServlet extends HttpServlet {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
         System.out.println("START OF ADD METHOD");
 
-
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
-        int pageCount = Integer.parseInt(request.getParameter("pageCount"));
-        String isbn = request.getParameter("isbn");
-        String des = request.getParameter("description");
-        String publDate = request.getParameter("publDate");
-        String authors = request.getParameter("authors");
-        String genres = request.getParameter("genres");
-        int amount = Integer.parseInt(request.getParameter("amount"));
+        String author = request.getParameter("author");
         System.out.println("middle OF ADD METHOD");
 
-        bookServicesImpl.addBook(title, publisher, pageCount, isbn, des, publDate, authors, genres, amount);
+        bookServicesImpl.addBook(title, publisher, author);
         System.out.println("end OF ADD METHOD");
 
         request.setAttribute("action", null);

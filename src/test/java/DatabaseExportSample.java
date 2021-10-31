@@ -1,5 +1,3 @@
-import by.hardzeyeu.libraryV2.connection.C3P0DataSource;
-import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;

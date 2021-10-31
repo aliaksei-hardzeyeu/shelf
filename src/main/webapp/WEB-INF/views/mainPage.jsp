@@ -22,10 +22,7 @@
             Author
         </div>
         <div class="cell">
-            Publ Date
-        </div>
-        <div class="cell">
-            Amount
+            Publisher
         </div>
         <div class="cell">
             Actions
@@ -34,28 +31,27 @@
 
 
     <c:forEach var="book" items="${listOfBooks}">
-
         <div class="flex-row">
             <div class="cell">
                 <form action="${pageContext.request.contextPath}/" method="get">
-                    <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                    <input type="hidden" name="id" value="<c:out value='${book.id}'/>"/>
                     <input type="hidden" name="type" value="existing"/>
                     <input type="hidden" name="action" value="view"/>
                     <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
                 </form>
             </div>
+
             <div class="cell">
-                <c:out value="${book.authors}"/>
+                <c:out value="${book.author}"/>
             </div>
+
             <div class="cell">
-                <c:out value="${book.publDate}"/>
+                <c:out value="${book.publisher}"/>
             </div>
-            <div class="cell">
-                <c:out value="${book.amount}"/>
-            </div>
+
             <div class="cell">
                 <form action="${pageContext.request.contextPath}/" method="post">
-                    <input type="hidden" name="bookId" value="<c:out value='${book.bookId}'/>"/>
+                    <input type="hidden" name="id" value="<c:out value='${book.id}'/>"/>
                     <input type="hidden" name="action" value="remove"/>
                     <input type="submit" name="view" value="remove"/>
                 </form>
@@ -71,12 +67,5 @@
     </form>
 </div>
 
-
 </body>
-
 </html>
-
-<%--                <a href="<%=request.getContextPath()%>/edit_book?book_id=<c:out value='${book.book_id}'/>"><c:out value="${book.title}"/></a>
-                <a href="<%=request.getContextPath()%>/remove_book?book_id=<c:out value='${book.book_id}'/>">Remove</a>
-
---%>

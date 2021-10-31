@@ -1,8 +1,7 @@
 package by.hardzeyeu.libraryV2.dao;
 
-import by.hardzeyeu.libraryV2.connection.C3P0DataSource;
+import by.hardzeyeu.libraryV2.connection.DBWorker;
 import by.hardzeyeu.libraryV2.models.Book;
-import by.hardzeyeu.libraryV2.services.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,21 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDAO {
+    static DBWorker dbWorker = new DBWorker();
+    static Connection connection = dbWorker.getConnection();
 
 
-    public Book getBook(int bookId) {
+    public Book getBook(int id) {
         Book book = new Book();
-        String query = "SELECT * FROM books WHERE book_id = ?";
+        String query1 = "SELECT shelf.title, shelf.author, publishers.publisher FROM shelf LEFT JOIN publishers ON shelf.id = publishers.id WHERE shelf.id = ?";
 
-        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, bookId);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query1);
+            preparedStatement.setInt(1, id);
 
             ResultSet result = preparedStatement.executeQuery();
 
             result.next();
-            writeParamsToBook(result, book);
 
+            book.setId(id);
+            book.setTitle(result.getString("title"));
+            book.setAuthor(result.getString("author"));
+            book.setPublisher(result.getString("publisher"));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,22 +40,27 @@ public class BookDAO {
         return book;
     }
 
-
     public List<Book> getListOfBooks() {
         List<Book> listOfBooks = new ArrayList<>();
-        String query = "SELECT * FROM books";
+        String query = "SELECT shelf.id, shelf.title, shelf.author, publishers.publisher FROM shelf LEFT JOIN publishers ON shelf.id = publishers.id";
 
-        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
+        try {
+            if (connection.isClosed()) System.out.println("connection closed");
+
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
 
             while (result.next()) {
                 Book book = new Book();
 
-                writeParamsToBook(result, book);
+                book.setId(result.getInt("id"));
+                book.setTitle(result.getString("title"));
+                book.setAuthor(result.getString("author"));
+                book.setPublisher(result.getString("publisher"));
 
                 listOfBooks.add(book);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,76 +68,74 @@ public class BookDAO {
         return listOfBooks;
     }
 
-    /**
-     * Method for writing parameters from DB to book model
-     *
-     * @param result
-     * @param book
-     * @throws SQLException
-     */
-    private void writeParamsToBook(ResultSet result, Book book) throws SQLException {
-        book.setBookId(result.getInt("book_id"));
-        book.setTitle(result.getString("title"));
-        book.setPublisher(result.getString("publisher"));
-        book.setPageCount(result.getInt("page_count"));
-        book.setIsbn(result.getString("isbn"));
-        book.setDes(result.getString("des"));
-        book.setPublDate(Utils.convertToLocalDateViaSqlDate(result.getDate("publ_date")));
-        book.setStatus(result.getString("status"));
-        book.setAuthors(result.getString("authors"));
-        book.setGenres(result.getString("genres"));
-        book.setAmount(result.getInt("amount"));
+
+    public int getBookId(String title) {
+        int id = 0;
+        String query = "SELECT id FROM shelf WHERE title = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, title);
+
+            ResultSet result = preparedStatement.executeQuery();
+
+            result.next();
+            id = result.getInt(1);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
     }
 
+    public void addBook(String title, String publisher, String author) {
 
-    public void addBook(String title, String publisher, int page_count, String isbn, String des, String publDate,
-                        String authors, String genres, int amount) {
+        String query1 = "INSERT INTO shelf (title, author) VALUES (?, ?)";
+        String query2 = "INSERT INTO publishers (id, publisher) VALUES (?, ?)";
 
-        String query = "INSERT INTO books (title, publisher, page_count, isbn, des, publ_date, authors, genres, amount)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
             preparedStatement.setString(1, title);
-            preparedStatement.setString(2, publisher);
-            preparedStatement.setInt(3, page_count);
-            preparedStatement.setString(4, isbn);
-            preparedStatement.setString(5, des);
-            preparedStatement.setString(6, publDate);
-            preparedStatement.setString(7, authors);
-            preparedStatement.setString(8, genres);
-            preparedStatement.setInt(9, amount);
+            preparedStatement.setString(2, author);
 
             preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(query2);
+            preparedStatement.setInt(1, getBookId(title));
+            preparedStatement.setString(2, publisher);
+
+            preparedStatement.execute();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateBook(String title, String publisher, int page_count, String isbn, String des, String publDate,
-                           String authors, String genres, int amount, int book_id) {
+    public void updateBook(int id, String title, String publisher, String author) {
 
-        String query = "UPDATE books SET title = ?, publisher = ?, page_count = ?, isbn = ?, des = ?, publ_date = ?, " +
-                "authors =?, genres = ?, amount = ? WHERE book_id = ?";
+        String query1 = "UPDATE shelf SET title = ?, author = ? WHERE id = ?";
+        String query2 = "UPDATE publishers SET publisher = ? WHERE id = ?";
 
-        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
             preparedStatement.setString(1, title);
-            preparedStatement.setString(2, publisher);
-            preparedStatement.setInt(3, page_count);
-            preparedStatement.setString(4, isbn);
-            preparedStatement.setString(5, des);
-            preparedStatement.setString(6, publDate);
-            preparedStatement.setString(7, authors);
-            preparedStatement.setString(8, genres);
-            preparedStatement.setInt(9, amount);
-            preparedStatement.setInt(10, book_id);
-
+            preparedStatement.setString(2, author);
+            preparedStatement.setInt(3, id);
 
             preparedStatement.execute();
+
+
+            preparedStatement = connection.prepareStatement(query2);
+            preparedStatement.setString(1, publisher);
+            preparedStatement.setInt(2, id);
+
+            preparedStatement.execute();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,16 +143,19 @@ public class BookDAO {
 
     }
 
-    public void removeBook(int book_id) {
-        String query = "DELETE FROM books WHERE book_id = ?";
+    public void removeBook(int id) {
+        String query1 = "DELETE FROM shelf WHERE id = ?";
 
-        try (Connection connection = C3P0DataSource.getInstance().getConnection()) {
+        try {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
-            preparedStatement.setInt(1, book_id);
+            preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();

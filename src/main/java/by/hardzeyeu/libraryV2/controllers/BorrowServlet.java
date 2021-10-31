@@ -50,7 +50,7 @@ public class BorrowServlet extends HttpServlet {
         borrowService.addBorrow(bookId, userName, userEmail, timePeriod, comment);
 
         System.out.println("addborrow 3");
-
+//TODO CHANGE LOCALHOST TO NOT HARDCODED
         response.sendRedirect("http://localhost:8081/?action=view&type=existing&bookId=" + bookId);
     }
 

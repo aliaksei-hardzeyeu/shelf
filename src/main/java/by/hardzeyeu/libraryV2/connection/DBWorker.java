@@ -6,6 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Class for connection initialization
+ */
+
 public class DBWorker {
     private static final String URL = "jdbc:mysql://localhost:3306/andersen";
     private static final String USERNAME = "root";
@@ -25,5 +29,9 @@ public class DBWorker {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public void connectionClose() throws SQLException {
+        connection.close();
     }
 }

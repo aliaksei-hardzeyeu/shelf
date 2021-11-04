@@ -13,14 +13,21 @@ import java.util.List;
 
 public class BookDAO {
     static DBWorker dbWorker = new DBWorker();
-    static Connection connection = dbWorker.getConnection();
+    Connection connection;
 
 
-    public Book getBook(int id) {
+    public BookDAO() {
+        this.connection = dbWorker.getConnection();
+    }
+
+    public BookDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Book getBook(int id) throws SQLException {
         Book book = new Book();
         String query1 = "SELECT shelf.title, shelf.author, publishers.publisher FROM shelf LEFT JOIN publishers ON shelf.id = publishers.id WHERE shelf.id = ?";
 
-        try {
             PreparedStatement preparedStatement = connection.prepareStatement(query1);
             preparedStatement.setInt(1, id);
 
@@ -33,9 +40,6 @@ public class BookDAO {
             book.setAuthor(result.getString("author"));
             book.setPublisher(result.getString("publisher"));
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         return book;
     }

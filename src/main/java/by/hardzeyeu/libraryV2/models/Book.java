@@ -1,6 +1,7 @@
 package by.hardzeyeu.libraryV2.models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Book {
     private int id;
@@ -13,8 +14,15 @@ public class Book {
     }
 
 
-    public Book(String title, String author, String publisher, String genres,
-                int pageCount, String isbn, String des, LocalDate publDate, int amount) {
+    public Book(String title, String author, String publisher) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+
+    }
+
+    public Book(int id, String title, String author, String publisher) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.publisher = publisher;
@@ -57,9 +65,22 @@ public class Book {
         this.author = author;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(publisher, book.publisher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, publisher);
+    }
+
 
     @Override
     public String toString() {
-        return  "book_id= " + id + "| title = " + title +"| authors=" + author + "| publisher= " + publisher;
+        return  "id= " + id + "| title = " + title +"| authors=" + author + "| publisher= " + publisher;
     }
 }

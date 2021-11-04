@@ -4,6 +4,7 @@ import by.hardzeyeu.libraryV2.dao.BookDAO;
 import by.hardzeyeu.libraryV2.models.Book;
 import by.hardzeyeu.libraryV2.services.BookService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class BookServicesImpl implements BookService {
@@ -21,7 +22,7 @@ public class BookServicesImpl implements BookService {
     }
 
 
-    public Book getBook(int id) {
+    public Book getBook(int id) throws SQLException {
         return bookDAO.getBook(id);
     }
 

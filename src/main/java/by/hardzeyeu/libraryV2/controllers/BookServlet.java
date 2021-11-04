@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "BookServlet", value = "/")
@@ -18,7 +19,6 @@ public class BookServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        System.out.println("doPOST ACTION= " + action);
 
         switch (action == null ? "mainPage" : action) {
 
@@ -40,7 +40,6 @@ public class BookServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        System.out.println("doGET ACTION= " + action);
 
         switch (action == null ? "mainPage" : action) {
 
@@ -49,26 +48,47 @@ public class BookServlet extends HttpServlet {
                 break;
 
             case "view":
-                viewBook(request, response);
+                try {
+                    viewBook(request, response);
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 break;
         }
     }
 
+
+    /**
+     * Sets list of books as attribute, forwards to starting page
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+
     void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("start of viewMainPage method");
         BookService bookServicesImpl = BookServicesImpl.getInstance();
         List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
-        request.setAttribute("listOfBooks", listOfBooks);
-        System.out.println("end of viewMainPage method");
 
-        System.out.println("end-end of viewMainPage method");
+        request.setAttribute("listOfBooks", listOfBooks);
+
         request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
     }
 
-    void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("START OF view METHOD");
 
+    /**
+     * Allows: in case of action = "new" - add new book, in case of action = "existing" - view and edit existing book.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     * @throws SQLException
+     */
 
+    void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         String type = request.getParameter("type");
 
         if (type.equals("new")) {
@@ -76,42 +96,50 @@ public class BookServlet extends HttpServlet {
             request.setAttribute("actionOnPage", "add");
             request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
 
-        } else if (type.equals("existing")){
-            System.out.println("1 OF view METHOD");
-
-
+        } else if (type.equals("existing")) {
             int id = Integer.parseInt(request.getParameter("id"));
-
             BookService bookServicesImpl = BookServicesImpl.getInstance();
-            System.out.println("2 OF view METHOD");
 
             Book book = bookServicesImpl.getBook(id);
 
-            System.out.println("3 OF view METHOD");
-
-
             request.setAttribute("book", book);
             request.setAttribute("actionOnPage", "update");
-            System.out.println("end OF view METHOD");
 
             request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
         }
     }
 
+
+    /**
+     * Takes new book properties from book form and updates old ones.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+
     void updateBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("START OF UPDATE METHOD");
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
         String author = request.getParameter("author");
         int id = Integer.parseInt(request.getParameter("id"));
-        System.out.println("MIDDLE OF UPDATE METHOD");
 
         bookServicesImpl.updateBook(title, publisher, author, id);
-        System.out.println("END OF UPDATE METHOD");
         viewMainPage(request, response);
     }
+
+
+    /**
+     * Removes book with specified id.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
 
     void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
@@ -120,19 +148,25 @@ public class BookServlet extends HttpServlet {
         viewMainPage(request, response);
     }
 
+
+    /**
+     * Adds new book from "new book" form into DB.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+
     void addBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-        System.out.println("START OF ADD METHOD");
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
         String author = request.getParameter("author");
-        System.out.println("middle OF ADD METHOD");
 
         bookServicesImpl.addBook(title, publisher, author);
-        System.out.println("end OF ADD METHOD");
 
-        request.setAttribute("action", null);
-        viewMainPage(request, response);
+        response.sendRedirect("/");
     }
 }

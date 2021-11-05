@@ -15,6 +15,15 @@ import java.util.List;
 
 @WebServlet(name = "BookServlet", value = "/")
 public class BookServlet extends HttpServlet {
+    private final BookService bookServicesImpl;
+
+    public BookServlet() {
+        this.bookServicesImpl = BookServicesImpl.getInstance();
+    }
+
+    public BookServlet(BookService bookServiceImpl) {
+        this.bookServicesImpl = bookServiceImpl;
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -69,7 +78,7 @@ public class BookServlet extends HttpServlet {
      */
 
     void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookService bookServicesImpl = BookServicesImpl.getInstance();
+//        BookService bookServicesImpl = BookServicesImpl.getInstance();
         List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
 
         request.setAttribute("listOfBooks", listOfBooks);
@@ -98,7 +107,7 @@ public class BookServlet extends HttpServlet {
 
         } else if (type.equals("existing")) {
             int id = Integer.parseInt(request.getParameter("id"));
-            BookService bookServicesImpl = BookServicesImpl.getInstance();
+//            BookService bookServicesImpl = BookServicesImpl.getInstance();
 
             Book book = bookServicesImpl.getBook(id);
 
@@ -120,7 +129,7 @@ public class BookServlet extends HttpServlet {
      */
 
     void updateBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");
@@ -142,7 +151,7 @@ public class BookServlet extends HttpServlet {
      */
 
     void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("id")));
         viewMainPage(request, response);
@@ -159,7 +168,7 @@ public class BookServlet extends HttpServlet {
      */
 
     void addBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
+//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
 
         String title = request.getParameter("title");
         String publisher = request.getParameter("publisher");

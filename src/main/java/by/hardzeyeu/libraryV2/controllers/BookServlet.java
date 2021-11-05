@@ -31,17 +31,30 @@ public class BookServlet extends HttpServlet {
 
         switch (action == null ? "mainPage" : action) {
 
-            case "update":
-                updateBook(request, response);
-                break;
+            case "update" -> {
+                String title = request.getParameter("title");
+                String publisher = request.getParameter("publisher");
+                String author = request.getParameter("author");
+                int id = Integer.parseInt(request.getParameter("id"));
+                bookServicesImpl.updateBook(title, publisher, author, id);
 
-            case "remove":
-                removeBook(request, response);
-                break;
+                response.sendRedirect("/");
+            }
 
-            case "add":
-                addBook(request, response);
-                break;
+            case "remove" -> {
+                bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("id")));
+
+                response.sendRedirect("/");
+            }
+
+            case "add" -> {
+                String title = request.getParameter("title");
+                String publisher = request.getParameter("publisher");
+                String author = request.getParameter("author");
+                bookServicesImpl.addBook(title, publisher, author);
+
+                response.sendRedirect("/");
+            }
         }
     }
 
@@ -52,130 +65,22 @@ public class BookServlet extends HttpServlet {
 
         switch (action == null ? "mainPage" : action) {
 
-            case "mainPage":
-                viewMainPage(request, response);
-                break;
+            case "mainPage" -> {
+                List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
+                request.setAttribute("listOfBooks", listOfBooks);
 
-            case "view":
-                try {
-                    viewBook(request, response);
+                request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
+            }
 
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                break;
+            case "addNew" -> request.getRequestDispatcher("WEB-INF/views/addNew.jsp").forward(request, response);
+
+            case "update" -> {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Book book = bookServicesImpl.getBook(id);
+                request.setAttribute("book", book);
+
+                request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
+            }
         }
-    }
-
-
-    /**
-     * Sets list of books as attribute, forwards to starting page
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-
-    void viewMainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        BookService bookServicesImpl = BookServicesImpl.getInstance();
-        List<Book> listOfBooks = bookServicesImpl.getListOfBooks();
-
-        request.setAttribute("listOfBooks", listOfBooks);
-
-        request.getRequestDispatcher("WEB-INF/views/mainPage.jsp").forward(request, response);
-    }
-
-
-    /**
-     * Allows: in case of action = "new" - add new book, in case of action = "existing" - view and edit existing book.
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     * @throws SQLException
-     */
-
-    void viewBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        String type = request.getParameter("type");
-
-        if (type.equals("new")) {
-
-            request.setAttribute("actionOnPage", "add");
-            request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
-
-        } else if (type.equals("existing")) {
-            int id = Integer.parseInt(request.getParameter("id"));
-//            BookService bookServicesImpl = BookServicesImpl.getInstance();
-
-            Book book = bookServicesImpl.getBook(id);
-
-            request.setAttribute("book", book);
-            request.setAttribute("actionOnPage", "update");
-
-            request.getRequestDispatcher("WEB-INF/views/bookPage.jsp").forward(request, response);
-        }
-    }
-
-
-    /**
-     * Takes new book properties from book form and updates old ones.
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-
-    void updateBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-
-        String title = request.getParameter("title");
-        String publisher = request.getParameter("publisher");
-        String author = request.getParameter("author");
-        int id = Integer.parseInt(request.getParameter("id"));
-
-        bookServicesImpl.updateBook(title, publisher, author, id);
-        viewMainPage(request, response);
-    }
-
-
-    /**
-     * Removes book with specified id.
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-
-    void removeBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-
-        bookServicesImpl.removeBook(Integer.parseInt(request.getParameter("id")));
-        viewMainPage(request, response);
-    }
-
-
-    /**
-     * Adds new book from "new book" form into DB.
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-
-    void addBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        BookServicesImpl bookServicesImpl = BookServicesImpl.getInstance();
-
-        String title = request.getParameter("title");
-        String publisher = request.getParameter("publisher");
-        String author = request.getParameter("author");
-
-        bookServicesImpl.addBook(title, publisher, author);
-
-        response.sendRedirect("/");
     }
 }

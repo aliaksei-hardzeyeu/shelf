@@ -35,8 +35,7 @@
             <div class="cell">
                 <form action="${pageContext.request.contextPath}/" method="get">
                     <input type="hidden" name="id" value="<c:out value='${book.id}'/>"/>
-                    <input type="hidden" name="type" value="existing"/>
-                    <input type="hidden" name="action" value="view"/>
+                    <input type="hidden" name="action" value="update"/>
                     <input type="submit" name="view" value="<c:out value='${book.title}'/>"/>
                 </form>
             </div>
@@ -61,9 +60,8 @@
 
 
     <form class="button-add" action="${pageContext.request.contextPath}/" method="get">
-        <input type="hidden" name="action" value="view"/>
-        <input type="hidden" name="type" value="new"/>
-        <input type="submit" name="add" value="ADD"/>
+        <input type="hidden" name="action" value="addNew"/>
+        <input type="submit" name="add" value="add"/>
     </form>
 </div>
 

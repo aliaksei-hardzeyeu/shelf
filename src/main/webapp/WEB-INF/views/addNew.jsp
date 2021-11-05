@@ -17,21 +17,17 @@
 
         <form id="send-values" action="${pageContext.request.contextPath}/" method="post">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="<c:out value="${book.title}"/>" required="required"><br>
+            <input type="text" id="title" name="title" required="required"><br>
 
             <label for="author">Author:</label>
-            <input type="text" id="author" name="author" value="<c:out value="${book.author}"/>" required="required"><br>
+            <input type="text" id="author" name="author" required="required"><br>
 
             <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" name="publisher" value="<c:out value="${book.publisher}"/>" required="required"><br>
+            <input type="text" id="publisher" name="publisher"  required="required"><br>
 
 
-
-            <input type="hidden" id="id" name="id" value="<c:out value="${book.id}"/>"><br>
-
-            <input type="hidden" name="action" value="update"/>
-
-            <input type="submit" form="send-values" name="update"/>
+            <input type="hidden" name="action" value="add" ><br>
+            <input type="submit" form="send-values" name="add"/>
         </form>
 
 

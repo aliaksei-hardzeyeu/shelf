@@ -1,6 +1,6 @@
 package by.hardzeyeu.libraryV2.controllers;
 
-import by.hardzeyeu.libraryV2.models.Book;
+import by.hardzeyeu.libraryV2.dao.BookDao;
 import by.hardzeyeu.libraryV2.services.BookService;
 import by.hardzeyeu.libraryV2.services.implementations.BookServicesImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -23,12 +22,7 @@ import java.util.Map;
 
 import static by.hardzeyeu.libraryV2.dao.testData.BookDaoTestData.book1;
 import static by.hardzeyeu.libraryV2.dao.testData.BookDaoTestData.books;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.clearInvocations;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,32 +30,24 @@ import static org.mockito.Mockito.when;
 
 
 class BookServletTest {
-    private static final String EMPTY_STRING = "";
+    // Collection to store HttpServletRequest keys/values attributes
+    private static final Map<String, Object> attributes = new HashMap<>();
     private static BookService bookServicesImpl;
     private static HttpServletRequest request;
     private static HttpServletResponse response;
     private static RequestDispatcher requestDispatcher;
     private static BookServlet bookServlet;
-    // Collection to store HttpServletRequest keys/values attributes
-    private static final Map<String, Object> attributes = new HashMap<>();
-
+    private static BookDao bookDao;
 
     @BeforeAll
     public static void setup() throws SQLException, ServletException, IOException {
-        //setup servlet methods
-//        doNothing().when(bookServlet).viewMainPage(request, response);
-//        doNothing().when(bookServlet).viewBook(request, response);
-//        doNothing().when(bookServlet).updateBook(request, response);
-//        doNothing().when(bookServlet).removeBook(request, response);
-//        doNothing().when(bookServlet).addBook(request, response);
-
         //setup bookService
-        bookServicesImpl = mock(BookServicesImpl.class);
-        when(bookServicesImpl.getListOfBooks()).thenReturn(books);
-        when(bookServicesImpl.getBook(1)).thenReturn(book1);
-        doNothing().when(bookServicesImpl).addBook(isA(String.class), isA(String.class), isA(String.class));
-        doNothing().when(bookServicesImpl).updateBook(isA(String.class), isA(String.class), isA(String.class), isA(Integer.class));
-        doNothing().when(bookServicesImpl).removeBook(isA(Integer.class));
+        bookDao = mock(BookDao.class);
+        when(bookDao.getListOfBooks()).thenReturn(books);
+        when(bookDao.getBook(1)).thenReturn(book1);
+        when(bookDao.updateBook(1, "title10", "author10", "publisher10")).thenReturn(true);
+        when(bookDao.addBook("title11", "author11", "publisher11")).thenReturn(true);
+        when(bookDao.removeBook(1)).thenReturn(true);
 
         //setup servlets objects
         request = mock(HttpServletRequest.class);
@@ -69,6 +55,7 @@ class BookServletTest {
         requestDispatcher = mock(RequestDispatcher.class);
 
         //setup controller
+        bookServicesImpl = new BookServicesImpl(bookDao);
         bookServlet = new BookServlet(bookServicesImpl);
 
         // Mock setAttribute
@@ -96,6 +83,8 @@ class BookServletTest {
     @AfterEach
     void resetAttributeStorage() {
         attributes.clear();
+        clearInvocations(requestDispatcher);
+        clearInvocations(response);
     }
 
 
@@ -113,99 +102,78 @@ class BookServletTest {
         Assertions.assertEquals(books, request.getAttribute("listOfBooks"));
         // verify called methods
         verify(requestDispatcher, times(1)).forward(request, response);
-
     }
 
+
     @Test
-    void doGet_Action_ViewBook_Type_Add() throws ServletException, IOException {
-//reset only the number of invocations
-        clearInvocations(requestDispatcher);
+    void doGet_Action_Add() throws ServletException, IOException {
         //define mocks behavior for our case
-        when(request.getParameter("action")).thenReturn("view");
-        when(request.getParameter("type")).thenReturn("new");
-        when(request.getRequestDispatcher("WEB-INF/views/bookPage.jsp")).thenReturn(requestDispatcher);
+        when(request.getParameter("action")).thenReturn("addNew");
+        when(request.getRequestDispatcher("WEB-INF/views/addNew.jsp")).thenReturn(requestDispatcher);
 
         bookServlet.doGet(request, response);
 
-        //check request attributes
-        Assertions.assertEquals("add", request.getAttribute("actionOnPage"));
         // verify called methods
         verify(requestDispatcher, times(1)).forward(request, response);
-
     }
 
+
     @Test
-    void doGet_Action_ViewBook_Type_Existing() throws ServletException, IOException {
-//reset only the number of invocations
-        clearInvocations(requestDispatcher);
+    void doGet_Action_Update() throws ServletException, IOException {
         //define mocks behavior for our case
-        when(request.getParameter("action")).thenReturn("view");
-        when(request.getParameter("type")).thenReturn("existing");
+        when(request.getParameter("action")).thenReturn("update");
         when(request.getParameter("id")).thenReturn("1");
         when(request.getRequestDispatcher("WEB-INF/views/bookPage.jsp")).thenReturn(requestDispatcher);
 
         bookServlet.doGet(request, response);
 
         //check request attributes
-        Assertions.assertEquals("update", request.getAttribute("actionOnPage"));
         Assertions.assertEquals(book1, request.getAttribute("book"));
         // verify called methods
         verify(requestDispatcher, times(1)).forward(request, response);
-
     }
 
-    @Test
-    void doPost_Action_UpdateBook() throws ServletException, IOException {
-        clearInvocations(requestDispatcher);
-        //define mocks behavior for our case
-        BookServlet spyBookServlet = Mockito.spy(bookServlet);
 
+    @Test
+    void doPost_Action_Update() throws ServletException, IOException {
+        //define mocks behavior for our case
         when(request.getParameter("action")).thenReturn("update");
         when(request.getParameter("id")).thenReturn("1");
-        when(request.getParameter("title")).thenReturn("title1");
-        when(request.getParameter("author")).thenReturn("author1");
-        when(request.getParameter("publisher")).thenReturn("publisher1");
-        doNothing().when(spyBookServlet).viewMainPage(request, response);
+        when(request.getParameter("title")).thenReturn("title10");
+        when(request.getParameter("author")).thenReturn("author10");
+        when(request.getParameter("publisher")).thenReturn("publisher10");
 
-        spyBookServlet.doPost(request, response);
+        bookServlet.doPost(request, response);
 
         // verify called methods
-        verify(bookServicesImpl, times(1)).updateBook(isA(String.class), isA(String.class), isA(String.class), isA(Integer.class));
-        verify(spyBookServlet, times(1)).viewMainPage(request, response);
+        verify(response, times(1)).sendRedirect("/");
     }
 
-    @Test
-    void doPost_Action_RemoveBook() throws ServletException, IOException {
-        clearInvocations(response);
-
-        BookServlet spyBookServlet = Mockito.spy(bookServlet);
-
-        when(request.getParameter("action")).thenReturn("remove");
-        when(request.getParameter("id")).thenReturn(String.valueOf(1));
-        doNothing().when(spyBookServlet).viewMainPage(request, response);
-
-        spyBookServlet.doPost(request, response);
-
-
-        verify(bookServicesImpl, times(1)).removeBook(isA(Integer.class));
-        verify(spyBookServlet, times(1)).viewMainPage(request, response);
-    }
 
     @Test
-    void doPost_Action_AddBook() throws ServletException, IOException {
-        clearInvocations(response);
+    void doPost_Action_Remove() throws ServletException, IOException {
         //define mocks behavior for our case
-        BookServlet spyBookServlet = Mockito.spy(bookServlet);
+        when(request.getParameter("action")).thenReturn("remove");
+        when(request.getParameter("id")).thenReturn("1");
 
-        when(request.getParameter("action")).thenReturn("add");
-        when(request.getParameter("title")).thenReturn("title1");
-        when(request.getParameter("author")).thenReturn("author1");
-        when(request.getParameter("publisher")).thenReturn("publisher1");
-
-        spyBookServlet.doPost(request, response);
+        bookServlet.doPost(request, response);
 
         // verify called methods
-        verify(bookServicesImpl, times(1)).addBook(isA(String.class), isA(String.class), isA(String.class));
+        verify(response, times(1)).sendRedirect("/");
+    }
+
+
+    @Test
+    void doPost_Action_Add() throws ServletException, IOException {
+        //define mocks behavior for our case
+        when(request.getParameter("action")).thenReturn("add");
+        when(request.getParameter("title")).thenReturn("title10");
+        when(request.getParameter("author")).thenReturn("author10");
+        when(request.getParameter("publisher")).thenReturn("publisher10");
+
+        bookServlet.doPost(request, response);
+
+        // verify called methods
         verify(response, times(1)).sendRedirect("/");
     }
 }

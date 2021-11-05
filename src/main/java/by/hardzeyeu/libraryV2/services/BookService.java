@@ -15,7 +15,7 @@ public interface BookService {
      * @throws SQLException
      */
 
-    Book getBook(int id) throws SQLException;
+    Book getBook(int id);
 
     /**
      * Gets entire list of books from DB
@@ -26,7 +26,7 @@ public interface BookService {
     List<Book> getListOfBooks();
 
     /**
-     *
+     * Adds book with given params
      *
      * @param title
      * @param publisher
@@ -35,7 +35,23 @@ public interface BookService {
 
     void addBook(String title, String publisher, String author);
 
-    void updateBook(String title, String publisher, String author, int id);
+
+    /**
+     * Updates existing book according to new parameters
+     *
+     * @param title
+     * @param publisher
+     * @param author
+     * @param id
+     */
+
+    void updateBook(String title,String author, String publisher, int id);
+
+
+    /**
+     * Removes book by id
+     * @param id
+     */
 
     void removeBook(int id);
 

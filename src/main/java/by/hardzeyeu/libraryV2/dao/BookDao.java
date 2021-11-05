@@ -11,16 +11,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDAO {
+public class BookDao {
     static DBWorker dbWorker = new DBWorker();
     Connection connection;
 
 
-    public BookDAO() {
+    public BookDao() {
         this.connection = dbWorker.getConnection();
     }
 
-    public BookDAO(Connection connection) {
+    public BookDao(Connection connection) {
         this.connection = connection;
     }
 
@@ -28,47 +28,42 @@ public class BookDAO {
         Book book = new Book();
         String query1 = "SELECT shelf.title, shelf.author, publishers.publisher FROM shelf LEFT JOIN publishers ON shelf.id = publishers.id WHERE shelf.id = ?";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(query1);
-            preparedStatement.setInt(1, id);
+        PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
-            ResultSet result = preparedStatement.executeQuery();
+        preparedStatement.setInt(1, id);
 
-            result.next();
 
-            book.setId(id);
-            book.setTitle(result.getString("title"));
-            book.setAuthor(result.getString("author"));
-            book.setPublisher(result.getString("publisher"));
+        ResultSet result = preparedStatement.executeQuery();
 
+        result.next();
+
+        book.setId(id);
+        book.setTitle(result.getString("title"));
+        book.setAuthor(result.getString("author"));
+        book.setPublisher(result.getString("publisher"));
 
         return book;
     }
 
-    public List<Book> getListOfBooks() {
+    public List<Book> getListOfBooks() throws SQLException {
         List<Book> listOfBooks = new ArrayList<>();
         String query = "SELECT shelf.id, shelf.title, shelf.author, publishers.publisher FROM shelf LEFT JOIN publishers ON shelf.id = publishers.id";
 
-        try {
-            if (connection.isClosed()) System.out.println("connection closed");
+        if (connection.isClosed()) System.out.println("connection closed");
 
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(query);
+        Statement statement = connection.createStatement();
+        ResultSet result = statement.executeQuery(query);
 
-            while (result.next()) {
-                Book book = new Book();
+        while (result.next()) {
+            Book book = new Book();
 
-                book.setId(result.getInt("id"));
-                book.setTitle(result.getString("title"));
-                book.setAuthor(result.getString("author"));
-                book.setPublisher(result.getString("publisher"));
+            book.setId(result.getInt("id"));
+            book.setTitle(result.getString("title"));
+            book.setAuthor(result.getString("author"));
+            book.setPublisher(result.getString("publisher"));
 
-                listOfBooks.add(book);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            listOfBooks.add(book);
         }
-
         return listOfBooks;
     }
 
@@ -90,11 +85,10 @@ public class BookDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return id;
     }
 
-    public void addBook(String title, String publisher, String author) {
+    public boolean addBook(String title, String author, String publisher) {
 
         String query1 = "INSERT INTO shelf (title, author) VALUES (?, ?)";
         String query2 = "INSERT INTO publishers (id, publisher) VALUES (?, ?)";
@@ -113,13 +107,13 @@ public class BookDAO {
 
             preparedStatement.execute();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
-    public void updateBook(int id, String title, String publisher, String author) {
+    public boolean updateBook(int id, String title, String author, String publisher) {
 
         String query1 = "UPDATE shelf SET title = ?, author = ? WHERE id = ?";
         String query2 = "UPDATE publishers SET publisher = ? WHERE id = ?";
@@ -133,21 +127,20 @@ public class BookDAO {
 
             preparedStatement.execute();
 
-
             preparedStatement = connection.prepareStatement(query2);
             preparedStatement.setString(1, publisher);
             preparedStatement.setInt(2, id);
 
             preparedStatement.execute();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
-        }
 
+        }
+        return true;
     }
 
-    public void removeBook(int id) {
+    public boolean removeBook(int id) {
         String query1 = "DELETE FROM shelf WHERE id = ?";
 
         try {
@@ -158,11 +151,9 @@ public class BookDAO {
 
             preparedStatement.executeUpdate();
 
-
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return true;
     }
 }

@@ -1,40 +1,33 @@
 package by.hardzeyeu.libraryV2.dao;
+
 import by.hardzeyeu.libraryV2.dao.testData.BookDaoTestData;
 import by.hardzeyeu.libraryV2.models.Book;
-import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.containers.MySQLContainer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 
 @Testcontainers
-class BookDAOTest {
+class BookDaoTest {
     private static String MYSQL_LATEST_IMAGE = "mysql:latest";
     private static Connection connection;
-    private static BookDAO bookDAO;
+    private static BookDao bookDAO;
 
 
     @Container
     private static JdbcDatabaseContainer mysql = new MySQLContainer<>(MYSQL_LATEST_IMAGE)
             .withInitScript("db/initDB.sql");
-
 
 
     @BeforeAll
@@ -44,7 +37,7 @@ class BookDAOTest {
                 mysql.getUsername(),
                 mysql.getPassword()
         );
-        bookDAO = new BookDAO(connection);
+        bookDAO = new BookDao(connection);
     }
 
 
@@ -60,7 +53,7 @@ class BookDAOTest {
     }
 
     @Test
-    public void getListOfBooks() {
+    public void getListOfBooks_ReturnsAllExistingBooksAsList() throws SQLException {
         List<Book> listOfBooks = bookDAO.getListOfBooks();
         Assertions.assertEquals(BookDaoTestData.books, listOfBooks);
     }
@@ -71,6 +64,7 @@ class BookDAOTest {
         Book newBook = bookDAO.getBook(2);
         Assertions.assertEquals(BookDaoTestData.book2, newBook);
     }
+
 
     @Test
     public void getBook_ByNotExistingId_ThrowsSqlException() {
@@ -87,7 +81,7 @@ class BookDAOTest {
 
     @Test
     public void addBook_ReturnAddedBook() throws SQLException {
-        Book newBook = new Book(4,"title666", "author666", "publisher666");
+        Book newBook = new Book(4, "title666", "author666", "publisher666");
         bookDAO.addBook("title666", "publisher666", "author666");
 
         Assertions.assertEquals(newBook, bookDAO.getBook(4));
@@ -104,11 +98,10 @@ class BookDAOTest {
 
 
     @Test
-    public void removeBook_ReturnListWithoutRemovedBook() {
+    public void removeBook_ReturnListWithoutRemovedBook() throws SQLException {
         List<Book> list1 = bookDAO.getListOfBooks();
         Book book = new Book(1, "title1", "author1", "publisher1");
         Assertions.assertEquals(book, list1.get(0));
-
 
         bookDAO.removeBook(1);
         List<Book> list2 = bookDAO.getListOfBooks();
@@ -116,12 +109,4 @@ class BookDAOTest {
         Assertions.assertEquals(2, list2.size());
         Assertions.assertThrows(SQLException.class, () -> bookDAO.getBook(1));
     }
-
-
-
-
-
-
-
-
-   }
+}

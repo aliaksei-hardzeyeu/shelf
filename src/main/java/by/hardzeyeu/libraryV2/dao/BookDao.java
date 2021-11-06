@@ -94,6 +94,7 @@ public class BookDao {
         String query2 = "INSERT INTO publishers (id, publisher) VALUES (?, ?)";
 
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
             preparedStatement.setString(1, title);
@@ -107,8 +108,14 @@ public class BookDao {
 
             preparedStatement.execute();
 
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         return true;
     }
@@ -119,6 +126,7 @@ public class BookDao {
         String query2 = "UPDATE publishers SET publisher = ? WHERE id = ?";
 
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(query1);
 
             preparedStatement.setString(1, title);
@@ -133,8 +141,14 @@ public class BookDao {
 
             preparedStatement.execute();
 
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
 
         }
         return true;

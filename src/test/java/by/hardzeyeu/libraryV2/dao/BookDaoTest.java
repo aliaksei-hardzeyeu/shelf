@@ -82,7 +82,7 @@ class BookDaoTest {
     @Test
     public void addBook_ReturnAddedBook() throws SQLException {
         Book newBook = new Book(4, "title666", "author666", "publisher666");
-        bookDAO.addBook("title666", "publisher666", "author666");
+        bookDAO.addBook("title666", "author666", "publisher666");
 
         Assertions.assertEquals(newBook, bookDAO.getBook(4));
     }
@@ -91,7 +91,7 @@ class BookDaoTest {
     @Test
     public void updateBook_ReturnUpdatedBook() throws SQLException {
         Book updatedBook = new Book(1, "title777", "author777", "publisher777");
-        bookDAO.updateBook(1, "title777", "publisher777", "author777");
+        bookDAO.updateBook(1, "title777", "author777", "publisher777");
 
         Assertions.assertEquals(updatedBook, bookDAO.getBook(1));
     }
